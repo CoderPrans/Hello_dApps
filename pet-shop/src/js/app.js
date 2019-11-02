@@ -24,18 +24,42 @@ App = {
   },
 
   initWeb3: async function() {
-    /*
-     * Replace me...
-     */
+    if (window.ethereum) {
+      App.web3Provider = window.ethereum;
+      try {
+        // Request account access
+        await window.ethereum.enable();
+      } catch (error) {
+        // User denied account access
+        console.log("User denied account access")
+      }
+    }
+    // Legacy dapp browsers
+    else if (windows.web3) {
+      App.web3Provider = window.web3.currentProvider;
+    }
+    // If no injected web3 instance is detected, fall back to Ganache
+    else {
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    }
+    web3 = new Web3(App.web3Provider);
+  }
 
     return App.initContract();
   },
 
   initContract: function() {
-    /*
-     * Replace me...
-     */
+    $.getJSON('Adption.json', function(data) {
+      // Get the necessary artifact file and instantiate it with the truffle-contract
+      var AdoptionArtifact = data;
+      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+      
+      // Set the provider for our contract
+      App.contracts.Adoption.setProvider(App.web3Provider);
 
+      // Use our contract to return and mark the adopted pets
+      return App.markAdopted();
+    });
     return App.bindEvents();
   },
 
