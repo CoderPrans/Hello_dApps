@@ -10,14 +10,4 @@ contract Inbox {
     function setMessage(string memory newMessage) public {
         message = newMessage;
     }
-    
-    /*
-    // getter function is not required for public storage variable it
-    // automatically creates a getter function with the same name as
-    // of the variable 
-    
-    function getMessage() public view returns (string memory) {
-        return message;
-    }
-    */
 }

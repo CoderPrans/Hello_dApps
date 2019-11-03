@@ -23,6 +23,14 @@ const input = {
 
 const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-console.log(JSON.stringify(output))
+let info = {};
+
+for(let contractName in output.contracts['inbox.sol']) {
+  let byteCode = output.contracts['inbox.sol'][contractName].evm.bytecode.object;
+  let abi = output.contracts['inbox.sol'][contractName].abi;
+  info[contractName] = {byteCode, abi} 
+}
+
+module.exports = {...info};
 
 
